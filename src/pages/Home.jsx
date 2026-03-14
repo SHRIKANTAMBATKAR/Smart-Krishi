@@ -4,6 +4,9 @@ import {
   FiShield,
   FiBookOpen,
   FiArrowRight,
+  FiSun,
+  FiMessageSquare,
+  FiUsers,
 } from 'react-icons/fi';
 import Footer from '../components/Footer';
 
@@ -13,36 +16,42 @@ const features = [
     title: 'Crop Disease Detection',
     desc: 'Upload crop leaf images to detect diseases using artificial intelligence.',
     color: 'from-green-400 to-emerald-500',
+    path: '/detect',
   },
   {
     icon: <FiShield size={24} />,
     title: 'Treatment Recommendation',
     desc: 'Get instant suggestions for treating crop diseases effectively.',
     color: 'from-blue-400 to-cyan-500',
+    path: '/detect',
   },
   {
     icon: <FiBookOpen size={24} />,
     title: 'Natural Farming Guide',
     desc: 'Learn organic and sustainable farming techniques for better yields.',
     color: 'from-amber-400 to-orange-500',
+    path: '/natural-farming',
   },
   {
-    icon: <FiBookOpen size={24} />,
+    icon: <FiSun size={24} />,
     title: 'Modern Farming Guide',
-    desc: 'Learn modern farming techniques for better yields.',
-    color: 'from-amber-400 to-orange-500',
+    desc: 'Discover modern methodologies and technology for smart agriculture.',
+    color: 'from-fuchsia-400 to-purple-500',
+    path: '/modern-farming',
   },
   {
-    icon: <FiBookOpen size={24} />,
-    title: 'Chat Bot',
+    icon: <FiMessageSquare size={24} />,
+    title: 'AI Chatbot',
     desc: 'Chat with our AI assistant to get instant answers to your farming questions.',
-    color: 'from-amber-400 to-orange-500',
+    color: 'from-pink-400 to-rose-500',
+    path: '/chatbot',
   },
   {
-    icon: <FiBookOpen size={24} />,
-    title: 'Contact Form For Farmers from experts',
-    desc: 'Contact our experts to get instant answers to your farming questions.',
-    color: 'from-amber-400 to-orange-500',
+    icon: <FiUsers size={24} />,
+    title: 'About Smart Krishi',
+    desc: 'Learn about our mission to empower farmers with advanced technology.',
+    color: 'from-indigo-400 to-violet-500',
+    path: '/about',
   },
 ];
 
@@ -123,19 +132,20 @@ function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((f, i) => (
-            <div
+            <Link
+              to={f.path}
               key={f.title}
-              className="card text-center group"
+              className="card text-center group block hover:-translate-y-1 transition-all duration-300"
               style={{ animationDelay: `${i * 0.1}s` }}
             >
               <div
-                className={`w-14 h-14 mx-auto mb-5 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}
+                className={`w-14 h-14 mx-auto mb-5 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all`}
               >
                 {f.icon}
               </div>
-              <h3 className="font-bold text-lg mb-2 text-gray-800">{f.title}</h3>
+              <h3 className="font-bold text-lg mb-2 text-gray-800 group-hover:text-primary-600 transition-colors">{f.title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

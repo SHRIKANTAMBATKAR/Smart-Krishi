@@ -11,6 +11,8 @@ import ChatbotPage from './pages/ChatbotPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ContactExpert from './pages/ContactExpert';
+import ProtectedRoute from './components/ProtectedRoute';
+
 function App() {
   return (
     <Router>
@@ -21,12 +23,15 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
-            <Route path="/detect" element={<DiseaseDetection />} />
-            <Route path="/result" element={<Result />} />
-            <Route path="/natural-farming" element={<NaturalFarming />} />
-            <Route path="/modern-farming" element={<ModernFarming />} />
-            <Route path="/chatbot" element={<ChatbotPage />} />
-            <Route path="/about" element={<About />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/detect" element={<DiseaseDetection />} />
+              <Route path="/result" element={<Result />} />
+              <Route path="/natural-farming" element={<NaturalFarming />} />
+              <Route path="/modern-farming" element={<ModernFarming />} />
+              <Route path="/chatbot" element={<ChatbotPage />} />
+              <Route path="/about" element={<About />} />
+            </Route>
           </Routes>
         </main>
         <Chatbot />

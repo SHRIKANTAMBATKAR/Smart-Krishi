@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { FaLeaf } from 'react-icons/fa';
 
@@ -14,7 +14,28 @@ const navLinks = [
 
 function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/login');
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -49,12 +70,23 @@ function Navbar() {
             ))}
           </ul>
           <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
-            <Link to="/login" className="text-sm font-semibold text-gray-700 hover:text-primary-600 transition-colors">
-              Login
-            </Link>
-            <Link to="/register" className="px-5 py-2.5 bg-gradient-to-r from-primary-600 to-emerald-600 text-white text-sm font-semibold rounded-xl shadow-md shadow-primary-500/20 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all">
-              Sign Up
-            </Link>
+            {user ? (
+              <>
+                <span className="text-sm font-semibold text-gray-700">Hi, {user.name || 'User'}</span>
+                <button onClick={handleLogout} className="px-5 py-2.5 bg-red-50 text-red-600 text-sm font-semibold rounded-xl hover:bg-red-100 transition-all">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-sm font-semibold text-gray-700 hover:text-primary-600 transition-colors">
+                  Login
+                </Link>
+                <Link to="/register" className="px-5 py-2.5 bg-gradient-to-r from-primary-600 to-emerald-600 text-white text-sm font-semibold rounded-xl shadow-md shadow-primary-500/20 hover:shadow-lg hover:-translate-y-0.5 active:scale-95 transition-all">
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -87,20 +119,37 @@ function Navbar() {
               </li>
             ))}
             <li className="px-4 py-2 mt-2 border-t border-gray-100 flex flex-col gap-2">
-              <Link
-                to="/login"
-                onClick={() => setMobileOpen(false)}
-                className="block text-center py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMobileOpen(false)}
-                className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-emerald-600 shadow-md shadow-primary-500/20 transition-all hover:shadow-lg"
-              >
-                Sign Up
-              </Link>
+              {user ? (
+                <>
+                  <span className="block text-center py-2.5 text-sm font-semibold text-gray-700">Hi, {user.name || 'User'}</span>
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false);
+                      handleLogout();
+                    }}
+                    className="block w-full text-center py-2.5 rounded-xl text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-center py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-center py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-emerald-600 shadow-md shadow-primary-500/20 transition-all hover:shadow-lg"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </li>
           </ul>
         </div>
