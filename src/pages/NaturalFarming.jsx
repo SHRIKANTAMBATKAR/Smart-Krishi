@@ -117,34 +117,34 @@ Key Rules:
 
 const videos = [
   {
-    id: 'jMKl0-Y4UGY',
-    title: 'Zero Budget Natural Farming – Subhash Palekar',
-    description: 'Learn the fundamentals of ZBNF from legendary Padma Shri awardee Subhash Palekar.',
+    id: 'XFBMF4OFS5A',
+    title: 'Jeevamrut Preparation',
+    description: 'A powerful organic soil enricher made from cow dung, cow urine, jaggery, and gram flour.',
   },
   {
-    id: '2b3RNMrIAXA',
-    title: 'How to Make Jeevamrut at Home',
-    description: 'Step-by-step guide to preparing Jeevamrut – the most powerful organic fertilizer.',
+    id: '5qkLjHMeQf8',
+    title: 'Beejamrut Seed Treatment',
+    description: 'An organic seed treatment method that protects seeds from soil-borne diseases.',
   },
   {
-    id: 'Yv2oB6JGqMo',
-    title: 'Natural Pest Control for Crops',
-    description: 'Effective organic pest management techniques using neem, garlic, and companion planting.',
+    id: 'b-SigV4YabY',
+    title: 'Organic Pest Control',
+    description: 'Natural methods to control pests without harmful chemicals, keeping crops safe.',
   },
   {
-    id: 'fBLMhGaalBE',
-    title: 'Vermicomposting – Complete Guide',
-    description: 'How to set up a vermicompost pit and turn farm waste into nutrient-rich compost.',
+    id: 'nxTzuasQLFo',
+    title: 'Composting',
+    description: 'Turn farm waste into nutrient-rich compost that improves soil health.',
   },
   {
-    id: '1A9sRYpJoRE',
-    title: 'Mulching Techniques for Better Yield',
-    description: 'Learn how mulching conserves water, suppresses weeds, and improves soil health naturally.',
+    id: 'Db0a_4lyCH8',
+    title: 'Mulching',
+    description: 'Covering soil with organic material to retain moisture and suppress weeds.',
   },
   {
-    id: 'nFMnOxMqdak',
-    title: 'Successful Organic Farming in India',
-    description: 'Inspiring real-life success stories of Indian farmers thriving with natural farming methods.',
+    id: 'Nk83ASvbNKk',
+    title: 'Crop Rotation',
+    description: 'Rotating crops across seasons prevents soil depletion and breaks pest cycles.',
   },
 ];
 

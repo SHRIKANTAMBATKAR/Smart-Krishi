@@ -39,6 +39,33 @@ export const predictDisease = async (imageFile) => {
   }
 };
 
+export const loginUser = async (email, password) => {
+  try {
+    const response = await axios.post('/api/login', { email, password });
+    return response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.error || 'Login failed');
+  }
+};
+
+export const registerUser = async (name, email, password) => {
+  try {
+    const response = await axios.post('/api/register', { name, email, password });
+    return response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.error || 'Registration failed');
+  }
+};
+
+export const submitContactForm = async (formData) => {
+  try {
+    const response = await axios.post('/api/contact', formData);
+    return response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.error || 'Failed to submit form');
+  }
+};
+
 // Perenual API for disease information
 const PERENUAL_API_KEY = 'sk-37Lh69ae89c913d6b15299';
 const PERENUAL_BASE_URL = 'https://perenual.com/api';
@@ -78,4 +105,7 @@ export default {
   predictDisease,
   fetchDiseases,
   searchDiseases,
+  loginUser,
+  registerUser,
+  submitContactForm
 };

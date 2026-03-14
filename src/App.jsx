@@ -8,7 +8,9 @@ import NaturalFarming from './pages/NaturalFarming';
 import About from './pages/About';
 import ModernFarming from './pages/ModernFarming';
 import ChatbotPage from './pages/ChatbotPage';
-
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ContactExpert from './pages/ContactExpert';
 function App() {
   return (
     <Router>
@@ -16,6 +18,8 @@ function App() {
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
             <Route path="/detect" element={<DiseaseDetection />} />
             <Route path="/result" element={<Result />} />
@@ -26,6 +30,7 @@ function App() {
           </Routes>
         </main>
         <Chatbot />
+        <ContactExpert />
       </div>
     </Router>
   );

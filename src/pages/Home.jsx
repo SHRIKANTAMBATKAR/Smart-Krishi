@@ -26,6 +26,24 @@ const features = [
     desc: 'Learn organic and sustainable farming techniques for better yields.',
     color: 'from-amber-400 to-orange-500',
   },
+  {
+    icon: <FiBookOpen size={24} />,
+    title: 'Modern Farming Guide',
+    desc: 'Learn modern farming techniques for better yields.',
+    color: 'from-amber-400 to-orange-500',
+  },
+  {
+    icon: <FiBookOpen size={24} />,
+    title: 'Chat Bot',
+    desc: 'Chat with our AI assistant to get instant answers to your farming questions.',
+    color: 'from-amber-400 to-orange-500',
+  },
+  {
+    icon: <FiBookOpen size={24} />,
+    title: 'Contact Form For Farmers from experts',
+    desc: 'Contact our experts to get instant answers to your farming questions.',
+    color: 'from-amber-400 to-orange-500',
+  },
 ];
 
 const steps = [

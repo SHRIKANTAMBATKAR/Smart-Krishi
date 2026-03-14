@@ -112,41 +112,43 @@ const techniques = [
 
 const videos = [
     {
-        id: 'EhAemz1v7dQ',
+        id: 'WhAfZhFxHTs',
         title: 'What is Precision Agriculture?',
         description: 'Explore how GPS, sensors and AI are revolutionizing modern farming practices.',
         gradient: 'from-blue-500 to-cyan-500',
     },
     {
-        id: 'jR0gBgDIcHM',
+        id: 'OqREBOP7A0I',
         title: 'Hydroponics Farming Explained',
         description: 'Complete guide to growing crops without soil using hydroponic systems.',
         gradient: 'from-teal-500 to-emerald-500',
     },
     {
-        id: 'I_SuMfOBGzc',
+        id: 'DrK9bm4jujs',
         title: 'Inside a Vertical Farm',
         description: 'See how vertical farms grow food in stacked layers with LED lights and no soil.',
         gradient: 'from-purple-500 to-violet-500',
     },
     {
-        id: 'PLyBaFdWPaU',
+        id: '-M5HL6CaEic',
         title: 'Drones in Agriculture',
         description: 'How agricultural drones are transforming crop monitoring and spraying.',
         gradient: 'from-orange-500 to-amber-500',
     },
+
     {
-        id: 'w8yLRqFr5s0',
-        title: 'Smart Irrigation with IoT',
-        description: 'Learn how IoT sensors automate irrigation for massive water savings.',
-        gradient: 'from-sky-500 to-blue-600',
-    },
-    {
-        id: 'DPNK7bc2qvI',
+        id: '_tijHjup-gM',
         title: 'Agri-Tech Revolution in India',
         description: 'How Indian startups and government initiatives are modernizing agriculture.',
         gradient: 'from-green-500 to-teal-500',
     },
+    {
+        id: '768YFl08OJk',
+        title: 'Smart Farming: The Future of Agriculture',
+        description: 'Discover how AI and smart technology are transforming traditional farming into precision agriculture.',
+        gradient: 'from-emerald-500 to-teal-600',
+    },
+
 ];
 
 function TechCard({ tech }) {
