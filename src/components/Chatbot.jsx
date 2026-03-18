@@ -19,8 +19,10 @@ Rules:
 - If a question is not related to farming or agriculture, politely redirect the user to ask farming-related questions.
 - Add relevant emoji to make responses engaging.`;
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 async function getGeminiResponse(chatHistory) {
-  const res = await fetch('/api/chat', {
+  const res = await fetch(`${API_BASE_URL}/api/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

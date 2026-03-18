@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
 // Helper: convert File to base64
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -19,7 +21,7 @@ export const predictDisease = async (imageFile) => {
     const formData = new FormData();
     formData.append('image', imageFile);
 
-    const response = await axios.post('/api/predict', formData, {
+    const response = await axios.post(`${API_BASE_URL}/api/predict`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
       timeout: 30000,
     });
@@ -41,7 +43,7 @@ export const predictDisease = async (imageFile) => {
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post('/api/login', { email, password });
+    const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
     return response.data;
   } catch (error) {
     throw new Error(error?.response?.data?.error || 'Login failed');
@@ -50,7 +52,7 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (name, email, password) => {
   try {
-    const response = await axios.post('/api/register', { name, email, password });
+    const response = await axios.post(`${API_BASE_URL}/api/register`, { name, email, password });
     return response.data;
   } catch (error) {
     throw new Error(error?.response?.data?.error || 'Registration failed');
@@ -59,7 +61,7 @@ export const registerUser = async (name, email, password) => {
 
 export const submitContactForm = async (formData) => {
   try {
-    const response = await axios.post('/api/contact', formData);
+    const response = await axios.post(`${API_BASE_URL}/api/contact`, formData);
     return response.data;
   } catch (error) {
     throw new Error(error?.response?.data?.error || 'Failed to submit form');
