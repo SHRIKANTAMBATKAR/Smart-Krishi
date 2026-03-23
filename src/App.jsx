@@ -24,12 +24,13 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
 
+
+            <Route path="/detect" element={<DiseaseDetection />} />
+            <Route path="/result" element={<Result />} />
+            <Route path="/natural-farming" element={<NaturalFarming />} />
+            <Route path="/modern-farming" element={<ModernFarming />} />
+            <Route path="/chatbot" element={<ChatbotPage />} />
             <Route element={<ProtectedRoute />}>
-              <Route path="/detect" element={<DiseaseDetection />} />
-              <Route path="/result" element={<Result />} />
-              <Route path="/natural-farming" element={<NaturalFarming />} />
-              <Route path="/modern-farming" element={<ModernFarming />} />
-              <Route path="/chatbot" element={<ChatbotPage />} />
               <Route path="/about" element={<About />} />
             </Route>
           </Routes>
