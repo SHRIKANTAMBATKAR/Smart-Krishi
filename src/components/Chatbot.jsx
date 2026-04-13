@@ -19,7 +19,12 @@ Rules:
 - If a question is not related to farming or agriculture, politely redirect the user to ask farming-related questions.
 - Add relevant emoji to make responses engaging.`;
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+// Normalize URL: Remove trailing slash if it exists
+if (API_BASE_URL.endsWith('/')) {
+  API_BASE_URL = API_BASE_URL.slice(0, -1);
+}
 
 async function getGeminiResponse(chatHistory) {
   const res = await fetch(`${API_BASE_URL}/api/chat`, {
@@ -209,11 +214,10 @@ function Chatbot() {
           <div className="p-3 border-t border-gray-100 bg-white flex gap-2 items-center">
             <button
               onClick={toggleListening}
-              className={`p-2.5 rounded-xl transition-all ${
-                isListening 
-                  ? 'bg-red-100 text-red-600 animate-pulse ring-2 ring-red-200' 
+              className={`p-2.5 rounded-xl transition-all ${isListening
+                  ? 'bg-red-100 text-red-600 animate-pulse ring-2 ring-red-200'
                   : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-              }`}
+                }`}
               title={isListening ? "Stop listening" : "Ask with voice"}
               disabled={loading}
             >

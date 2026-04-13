@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+let API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+// Normalize URL: Remove trailing slash if it exists to prevent double slashes like //api/contact
+if (API_BASE_URL.endsWith('/')) {
+  API_BASE_URL = API_BASE_URL.slice(0, -1);
+}
 
 // Helper: convert File to base64
 const fileToBase64 = (file) => {
@@ -23,7 +28,7 @@ export const predictDisease = async (imageFile) => {
 
     const response = await axios.post(`${API_BASE_URL}/api/predict`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-      timeout: 30000,
+      timeout: 60000, // 60 sec — Render free tier can take up to 60s to respond
     });
 
     return {
