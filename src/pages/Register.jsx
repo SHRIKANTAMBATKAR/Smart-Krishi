@@ -30,7 +30,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center -mx-4 -mt-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-white">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 via-white to-emerald-50">
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl shadow-xl shadow-primary-500/10 border border-green-100 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute -top-10 -left-10 w-40 h-40 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full blur-2xl opacity-50" />

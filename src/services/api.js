@@ -108,11 +108,39 @@ export const searchDiseases = async (query, page = 1) => {
   }
 };
 
+export const fetchWeatherAlerts = async (lat, lon) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/weather`, {
+      params: { lat, lon },
+      timeout: 15000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Weather API Error:', error);
+    throw new Error(error?.response?.data?.error || 'Failed to fetch weather data.');
+  }
+};
+
+export const geocodeCity = async (cityName) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/geocode`, {
+      params: { city: cityName },
+      timeout: 8000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Geocode API Error:', error);
+    throw new Error('Failed to search for city.');
+  }
+};
+
 export default {
   predictDisease,
   fetchDiseases,
   searchDiseases,
   loginUser,
   registerUser,
-  submitContactForm
-};
+  submitContactForm,
+  fetchWeatherAlerts,
+  geocodeCity,
+};

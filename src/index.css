@@ -2,21 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Google Font preconnect (Inter) ────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
   body {
     @apply bg-gray-50 text-gray-900 font-sans;
+    overflow-x: hidden;
+  }
+  * {
+    box-sizing: border-box;
   }
 }
 
 @layer components {
+  /* ── Buttons ─────────────────────────────────────────────── */
   .btn-primary {
-    @apply bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold
-           hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-500/25
+    @apply bg-gradient-to-r from-primary-600 to-emerald-500 text-white px-6 py-3 rounded-xl font-semibold
+           shadow-lg shadow-primary-500/25
+           hover:shadow-xl hover:shadow-primary-500/40 hover:-translate-y-0.5
            active:scale-95 transition-all duration-300 ease-in-out
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           relative overflow-hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    @apply absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition-opacity duration-300;
   }
 
   .btn-secondary {
@@ -27,30 +41,129 @@
            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
   }
 
+  /* ── Cards ────────────────────────────────────────────────── */
   .card {
     @apply bg-white rounded-2xl shadow-lg p-6
-           hover:shadow-xl hover:-translate-y-1
-           transition-all duration-300 ease-in-out;
+           hover:shadow-2xl hover:-translate-y-2
+           transition-all duration-500 ease-out
+           border border-gray-100/50;
   }
 
+  .card-glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl p-6
+           hover:shadow-2xl hover:-translate-y-1 hover:bg-white/80
+           transition-all duration-500 ease-out;
+  }
+
+  /* ── Glassmorphism ───────────────────────────────────────── */
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 rounded-2xl shadow-xl;
+    @apply bg-white/80 backdrop-blur-xl border border-white/30 rounded-2xl shadow-xl;
   }
 
+  .glass-dark {
+    @apply bg-gray-900/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  }
+
+  /* ── Text effects ─────────────────────────────────────────── */
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 to-emerald-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-600 via-emerald-500 to-teal-400 bg-clip-text text-transparent;
   }
 
+  .gradient-text-warm {
+    @apply bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      #16a34a 0%,
+      #22c55e 20%,
+      #4ade80 40%,
+      #22c55e 60%,
+      #16a34a 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* ── Section headers ──────────────────────────────────────── */
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-center mb-4;
+    @apply text-3xl md:text-5xl font-bold text-center mb-4 tracking-tight;
   }
 
   .section-subtitle {
-    @apply text-gray-500 text-center text-lg max-w-2xl mx-auto mb-12;
+    @apply text-gray-500 text-center text-lg max-w-2xl mx-auto mb-14 leading-relaxed;
+  }
+
+  /* ── Feature icon container ───────────────────────────────── */
+  .icon-box {
+    @apply w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-white shadow-lg
+           group-hover:scale-110 group-hover:shadow-xl group-hover:rotate-3
+           transition-all duration-500 ease-out;
+  }
+
+  /* ── Stat badge ───────────────────────────────────────────── */
+  .stat-badge {
+    @apply flex flex-col items-center justify-center p-6 rounded-2xl
+           bg-white/10 backdrop-blur-sm border border-white/20
+           hover:bg-white/20 transition-all duration-300;
+  }
+
+  /* ── Pill badge ───────────────────────────────────────────── */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* ── Scroll reveal (applied via JS/IntersectionObserver) ──── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-scale.visible {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* Custom scrollbar */
+/* ── Custom scrollbar ─────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -58,8 +171,124 @@
   @apply bg-gray-100;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary-300 rounded-full;
+  background: linear-gradient(to bottom, #16a34a, #22c55e);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary-500;
+  background: linear-gradient(to bottom, #15803d, #16a34a);
+}
+
+/* ── Animated gradient background ──────────────────────────── */
+.animated-gradient {
+  background: linear-gradient(
+    -45deg,
+    #0f4c1f,
+    #16a34a,
+    #059669,
+    #0d7490,
+    #1e3a5f
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* ── Particle dots (decorative) ──────────────────────────── */
+.particle {
+  @apply absolute rounded-full bg-white/20 pointer-events-none;
+  animation: float var(--duration, 6s) ease-in-out var(--delay, 0s) infinite;
+}
+
+/* ── Glow ring ─────────────────────────────────────────────── */
+.glow-ring {
+  @apply absolute inset-0 rounded-full;
+  box-shadow: 0 0 30px 8px rgba(34, 197, 94, 0.3);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ── Hover underline effect ───────────────────────────────── */
+.hover-underline {
+  @apply relative;
+}
+.hover-underline::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300;
+}
+.hover-underline:hover::after {
+  @apply w-full;
+}
+
+/* ── Number counter animation ─────────────────────────────── */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.count-up {
+  animation: countUp 1s ease-out forwards;
+}
+
+/* ── Tilt card effect (applied via JS) ───────────────────── */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+}
+
+/* ── Gradient border ──────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(1rem + 2px);
+  background: linear-gradient(135deg, #16a34a, #22c55e, #0d9488, #0891b2);
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  z-index: -1;
+}
+
+/* ── Shimmer loading skeleton ─────────────────────────────── */
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ── Hero particle canvas ─────────────────────────────────── */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ── Staggered animation delays ──────────────────────────── */
+.delay-75  { animation-delay: 75ms !important; }
+.delay-100 { animation-delay: 100ms !important; }
+.delay-150 { animation-delay: 150ms !important; }
+.delay-200 { animation-delay: 200ms !important; }
+.delay-300 { animation-delay: 300ms !important; }
+.delay-400 { animation-delay: 400ms !important; }
+.delay-500 { animation-delay: 500ms !important; }
+.delay-600 { animation-delay: 600ms !important; }
+.delay-700 { animation-delay: 700ms !important; }
+.delay-1000 { animation-delay: 1000ms !important; }
+
+/* ── Focus ring override ──────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #22c55e;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Smooth page transitions ──────────────────────────────── */
+.page-enter {
+  animation: fadeIn 0.4s ease-out forwards;
 }

@@ -6,6 +6,7 @@ const techniques = [
     {
         icon: '🎯',
         title: 'Precision Farming',
+        image: 'https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=600&h=300&fit=crop&auto=format',
         tagline: 'Data-driven agriculture for maximum efficiency',
         description:
             'Uses sensors, GPS, drones and data analytics to optimize every aspect of farming — from seeding to harvesting.',
@@ -27,6 +28,7 @@ const techniques = [
     {
         icon: '💧',
         title: 'Hydroponic Farming',
+        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop&auto=format',
         tagline: 'Grow crops without soil using nutrient-rich water',
         description:
             'Plants are grown in water-based nutrient solutions instead of soil, enabling farming in controlled indoor environments.',
@@ -48,6 +50,7 @@ const techniques = [
     {
         icon: '🏢',
         title: 'Vertical Farming',
+        image: 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?w=600&h=300&fit=crop&auto=format',
         tagline: 'Multi-layer indoor farming for urban areas',
         description:
             'Crops are grown in stacked vertical layers, using controlled environments with LED lighting and soilless techniques.',
@@ -69,6 +72,7 @@ const techniques = [
     {
         icon: '🚁',
         title: 'Drone Farming',
+        image: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=600&h=300&fit=crop&auto=format',
         tagline: 'Aerial crop monitoring and precision spraying',
         description:
             'Agricultural drones are used for crop health monitoring, mapping, and automated pesticide/fertilizer spraying.',
@@ -90,6 +94,7 @@ const techniques = [
     {
         icon: '📡',
         title: 'IoT Smart Irrigation',
+        image: 'https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?w=600&h=300&fit=crop&auto=format',
         tagline: 'Automated water management with sensors',
         description:
             'IoT sensors and mobile apps work together to automatically control irrigation based on real-time soil moisture data.',
@@ -155,75 +160,89 @@ function TechCard({ tech }) {
     const [expanded, setExpanded] = useState(false);
 
     return (
-        <div className="card overflow-hidden group">
-            {/* Header */}
-            <div className="flex items-start gap-4 mb-4">
+        <div className="card overflow-hidden group p-0">
+            {/* Image Banner */}
+            <div className="relative w-full h-44 overflow-hidden">
+                <img
+                    src={tech.image}
+                    alt={tech.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    loading="lazy"
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                {/* Icon badge */}
                 <div
-                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tech.color} flex items-center justify-center text-2xl shadow-lg flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}
+                    className={`absolute bottom-3 left-4 w-12 h-12 rounded-2xl bg-gradient-to-br ${tech.color} flex items-center justify-center text-2xl shadow-lg flex-shrink-0`}
                 >
                     {tech.icon}
                 </div>
-                <div>
-                    <h3 className="text-lg font-bold text-gray-800">{tech.title}</h3>
-                    <p className="text-sm text-gray-400">{tech.tagline}</p>
-                </div>
             </div>
 
-            {/* Description */}
-            <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                {tech.description}
-            </p>
-
-            {/* Toggle */}
-            <button
-                onClick={() => setExpanded(!expanded)}
-                className="text-primary-600 text-sm font-semibold flex items-center gap-1 hover:text-primary-700 transition-colors"
-            >
-                {expanded ? 'Show Less' : 'Learn More'}
-                {expanded ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
-            </button>
-
-            {/* Expanded Details */}
-            {expanded && (
-                <div className="mt-5 space-y-5 animate-fade-in">
-                    {/* How it works */}
-                    <div className={`rounded-xl p-4 bg-gradient-to-br ${tech.bgLight} border border-gray-100`}>
-                        <h4 className="font-semibold text-gray-700 mb-3 text-sm">⚙️ How It Works</h4>
-                        <ul className="space-y-2">
-                            {tech.howItWorks.map((item, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                                    <span className="mt-1 w-5 h-5 rounded-full bg-white text-xs flex items-center justify-center font-bold text-gray-500 flex-shrink-0 shadow-sm">
-                                        {i + 1}
-                                    </span>
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Benefits */}
-                    <div>
-                        <h4 className="font-semibold text-gray-700 mb-3 text-sm">✅ Benefits</h4>
-                        <ul className="space-y-2">
-                            {tech.benefits.map((b, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                                    <FiCheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={14} />
-                                    {b}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* India Status */}
-                    <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                        <h4 className="font-semibold text-amber-800 mb-1 text-sm flex items-center gap-1">
-                            <FiMapPin size={14} />
-                            Status in India
-                        </h4>
-                        <p className="text-sm text-amber-700 leading-relaxed">{tech.indiaStatus}</p>
-                    </div>
+            {/* Card Content */}
+            <div className="p-5">
+                {/* Header */}
+                <div className="mb-4">
+                    <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors">{tech.title}</h3>
+                    <p className="text-sm text-gray-400">{tech.tagline}</p>
                 </div>
-            )}
+
+                {/* Description */}
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    {tech.description}
+                </p>
+
+                {/* Toggle */}
+                <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="text-primary-600 text-sm font-semibold flex items-center gap-1 hover:text-primary-700 transition-colors"
+                >
+                    {expanded ? 'Show Less' : 'Learn More'}
+                    {expanded ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
+                </button>
+
+                {/* Expanded Details */}
+                {expanded && (
+                    <div className="mt-5 space-y-5 animate-fade-in">
+                        {/* How it works */}
+                        <div className={`rounded-xl p-4 bg-gradient-to-br ${tech.bgLight} border border-gray-100`}>
+                            <h4 className="font-semibold text-gray-700 mb-3 text-sm">⚙️ How It Works</h4>
+                            <ul className="space-y-2">
+                                {tech.howItWorks.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                                        <span className="mt-1 w-5 h-5 rounded-full bg-white text-xs flex items-center justify-center font-bold text-gray-500 flex-shrink-0 shadow-sm">
+                                            {i + 1}
+                                        </span>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Benefits */}
+                        <div>
+                            <h4 className="font-semibold text-gray-700 mb-3 text-sm">✅ Benefits</h4>
+                            <ul className="space-y-2">
+                                {tech.benefits.map((b, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                                        <FiCheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={14} />
+                                        {b}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* India Status */}
+                        <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                            <h4 className="font-semibold text-amber-800 mb-1 text-sm flex items-center gap-1">
+                                <FiMapPin size={14} />
+                                Status in India
+                            </h4>
+                            <p className="text-sm text-amber-700 leading-relaxed">{tech.indiaStatus}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
