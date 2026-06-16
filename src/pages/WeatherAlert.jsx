@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   FiMapPin, FiSearch, FiRefreshCw, FiClock, FiWind,
   FiDroplet, FiThermometer, FiAlertTriangle, FiCheckCircle,
-  FiNavigation, FiChevronDown, FiChevronUp, FiShield
+  FiNavigation, FiChevronDown, FiChevronUp, FiShield,
+  FiMail, FiBell, FiBellOff
 } from 'react-icons/fi';
 import axios from 'axios';
+import { subscribeWeatherAlerts, unsubscribeWeatherAlerts, getWeatherSubscriptionStatus } from '../services/api';
 import Footer from '../components/Footer';
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
@@ -136,6 +138,40 @@ export default function WeatherAlert() {
   const [error, setError] = useState('');
   const [lastUpdated, setLastUpdated] = useState(null);
   const [geoLoading, setGeoLoading] = useState(false);
+
+  // Auto-alert subscription state
+  const userEmail = (() => { try { return JSON.parse(localStorage.getItem('user'))?.email || ''; } catch { return ''; } })();
+  const [subStatus, setSubStatus] = useState(null);   // null | { subscribed, location_name, last_alerted_at, cooldown_remaining_min }
+  const [subLoading, setSubLoading] = useState(false);
+  const [subMessage, setSubMessage] = useState(null); // { type: 'success'|'error', text }
+
+  // Load subscription status whenever location is selected
+  useEffect(() => {
+    if (!userEmail || !selectedLocation) return;
+    getWeatherSubscriptionStatus(userEmail).then(status => setSubStatus(status));
+  }, [selectedLocation, userEmail]);
+
+  const handleToggleSubscription = async () => {
+    if (!selectedLocation) return;
+    setSubLoading(true);
+    setSubMessage(null);
+    try {
+      if (subStatus?.subscribed) {
+        const res = await unsubscribeWeatherAlerts(userEmail);
+        setSubStatus({ subscribed: false });
+        setSubMessage({ type: 'info', text: res.message || 'Auto-alerts disabled.' });
+      } else {
+        const res = await subscribeWeatherAlerts(userEmail, selectedLocation.lat, selectedLocation.lon, selectedLocation.name);
+        const freshStatus = await getWeatherSubscriptionStatus(userEmail);
+        setSubStatus(freshStatus);
+        setSubMessage({ type: 'success', text: res.message || 'Auto-alerts enabled!' });
+      }
+    } catch (err) {
+      setSubMessage({ type: 'error', text: err.message });
+    } finally {
+      setSubLoading(false);
+    }
+  };
 
   /* fetch weather */
   const fetchWeather = useCallback(async (lat, lon) => {
@@ -382,6 +418,120 @@ export default function WeatherAlert() {
                 <WeatherStatCard icon="💨" label="Wind Speed" value={Math.round(c?.windspeed_10m ?? 0)} unit="km/h" sub="At 10 m height" color="bg-sky-50" />
                 <WeatherStatCard icon="🌡️" label="Temperature" value={Math.round(c?.temperature_2m ?? 0)} unit="°C" sub={`Feels like ${Math.round(c?.apparent_temperature ?? 0)}°C`} color="bg-orange-50" />
                 <WeatherStatCard icon="💦" label="Humidity" value={Math.round(c?.relativehumidity_2m ?? 0)} unit="%" sub="Relative humidity" color="bg-teal-50" />
+              </div>
+            </div>
+
+            {/* ── Auto-Alert Subscription Card ────────────────── */}
+            <div className={`mb-8 rounded-2xl border-2 overflow-hidden shadow-lg transition-all duration-300 ${
+              subStatus?.subscribed
+                ? 'border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50'
+                : 'border-sky-200 bg-gradient-to-br from-sky-50 to-indigo-50'
+            }`}>
+              {/* Card header */}
+              <div className="flex items-center justify-between gap-3 px-6 py-4 border-b border-white/60">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    subStatus?.subscribed ? 'bg-emerald-500' : 'bg-sky-500'
+                  }`}>
+                    {subStatus?.subscribed ? <FiBell className="text-white" size={18} /> : <FiBellOff className="text-white" size={18} />}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-800 text-base">🔔 Automatic Weather Alerts</h3>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      {subStatus?.subscribed
+                        ? `Active for ${userEmail} · Checks every 30 min`
+                        : 'Get auto-emailed when bad weather is detected or approaching'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Toggle button */}
+                <button
+                  id="auto-alert-toggle-btn"
+                  onClick={handleToggleSubscription}
+                  disabled={subLoading || !selectedLocation}
+                  className={`relative inline-flex h-7 w-13 items-center rounded-full transition-colors duration-300 focus:outline-none disabled:opacity-50 ${
+                    subStatus?.subscribed ? 'bg-emerald-500' : 'bg-gray-300'
+                  }`}
+                  style={{ width: '52px' }}
+                  title={subStatus?.subscribed ? 'Click to disable auto-alerts' : 'Click to enable auto-alerts'}
+                >
+                  {subLoading
+                    ? <FiRefreshCw className="animate-spin text-white mx-auto" size={14} />
+                    : <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${
+                        subStatus?.subscribed ? 'translate-x-7' : 'translate-x-1'
+                      }`} />}
+                </button>
+              </div>
+
+              {/* Card body */}
+              <div className="px-6 py-5">
+                {subStatus?.subscribed ? (
+                  <div className="space-y-3">
+                    {/* Status pills */}
+                    <div className="flex flex-wrap gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+                        <FiCheckCircle size={12} /> Active at: {subStatus.location_name}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-100 text-sky-700 rounded-full text-xs font-semibold">
+                        <FiClock size={12} /> Checks every 30 min
+                      </span>
+                      {subStatus.last_alerted_at ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 text-amber-700 rounded-full text-xs font-semibold">
+                          <FiMail size={12} /> Last alerted: {new Date(subStatus.last_alerted_at).toLocaleString()}
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-500 rounded-full text-xs font-semibold">
+                          <FiMail size={12} /> No alert sent yet
+                        </span>
+                      )}
+                      {subStatus.cooldown_remaining_min > 0 && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">
+                          ⏳ Next alert eligible in {subStatus.cooldown_remaining_min} min
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Info box */}
+                    <div className="bg-white/70 border border-emerald-100 rounded-xl p-3">
+                      <p className="text-xs text-gray-600 leading-relaxed">
+                        📬 <strong>Emails will be sent to:</strong> {userEmail}<br />
+                        🛡️ <strong>Triggers on:</strong> Heavy rain, heat stress, high winds, frost risk, or storms<br />
+                        🚫 <strong>Cooldown:</strong> Max 1 email per 3 hours to avoid inbox spam
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="bg-white/70 border border-sky-100 rounded-xl p-4">
+                      <p className="text-sm text-gray-700 font-medium mb-2">How it works:</p>
+                      <ul className="space-y-1.5 text-xs text-gray-600">
+                        <li className="flex items-center gap-2"><span className="text-sky-500">①</span> Enable the toggle above to subscribe this location</li>
+                        <li className="flex items-center gap-2"><span className="text-sky-500">②</span> Our system checks weather every <strong>30 minutes</strong> automatically</li>
+                        <li className="flex items-center gap-2"><span className="text-sky-500">③</span> If <strong>bad or approaching-bad</strong> conditions are found, you get an email instantly</li>
+                        <li className="flex items-center gap-2"><span className="text-sky-500">④</span> Emails are sent to <strong>{userEmail || 'your account email'}</strong></li>
+                        <li className="flex items-center gap-2"><span className="text-sky-500">⑤</span> 3-hour cooldown prevents inbox spam</li>
+                      </ul>
+                    </div>
+                    <p className="text-xs text-gray-400">
+                      ⚡ Conditions monitored: Heavy rain · Extreme heat · High winds · Frost · Storms
+                    </p>
+                  </div>
+                )}
+
+                {/* Feedback message */}
+                {subMessage && (
+                  <div className={`mt-3 flex items-start gap-2.5 px-4 py-3 rounded-xl text-sm font-medium ${
+                    subMessage.type === 'success' ? 'bg-emerald-50 border border-emerald-200 text-emerald-800' :
+                    subMessage.type === 'info'    ? 'bg-gray-50 border border-gray-200 text-gray-700' :
+                    'bg-red-50 border border-red-200 text-red-700'
+                  }`}>
+                    {subMessage.type === 'success' && <FiCheckCircle className="text-emerald-500 shrink-0 mt-0.5" size={16} />}
+                    {subMessage.type === 'error'   && <FiAlertTriangle className="text-red-500 shrink-0 mt-0.5" size={16} />}
+                    {subMessage.type === 'info'    && <span className="shrink-0 mt-0.5">ℹ️</span>}
+                    <span>{subMessage.text}</span>
+                  </div>
+                )}
               </div>
             </div>
 

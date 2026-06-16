@@ -134,6 +134,65 @@ export const geocodeCity = async (cityName) => {
   }
 };
 
+/**
+ * Send a one-time weather alert email to the given address.
+ * The backend fetches current weather for lat/lon, runs the condition engine,
+ * and emails medium/high severity alerts to the address.
+ */
+export const sendWeatherAlertEmail = async (email, lat, lon, locationName) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/weather/send-alert`,
+      { email, lat, lon, locationName },
+      { timeout: 20000 }
+    );
+    return response.data; // { sent, alerts_count, message }
+  } catch (error) {
+    console.error('Send Weather Alert Email Error:', error);
+    throw new Error(error?.response?.data?.error || 'Failed to send weather alert email.');
+  }
+};
+
+/** Subscribe user to automatic weather alert emails (stored in DB, checked every 30 min). */
+export const subscribeWeatherAlerts = async (email, lat, lon, locationName) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/weather/subscribe`,
+      { email, lat, lon, locationName },
+      { timeout: 15000 }
+    );
+    return response.data; // { subscribed, message }
+  } catch (error) {
+    throw new Error(error?.response?.data?.error || 'Failed to subscribe to auto-alerts.');
+  }
+};
+
+/** Unsubscribe user from automatic weather alert emails. */
+export const unsubscribeWeatherAlerts = async (email) => {
+  try {
+    const response = await axios.delete(
+      `${API_BASE_URL}/api/weather/subscribe`,
+      { data: { email }, timeout: 15000 }
+    );
+    return response.data; // { subscribed: false, message }
+  } catch (error) {
+    throw new Error(error?.response?.data?.error || 'Failed to unsubscribe from auto-alerts.');
+  }
+};
+
+/** Check if a user has an active auto-alert subscription. */
+export const getWeatherSubscriptionStatus = async (email) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/weather/subscription`, {
+      params: { email },
+      timeout: 10000,
+    });
+    return response.data; // { subscribed, location_name, last_alerted_at, cooldown_remaining_min, ... }
+  } catch (error) {
+    return { subscribed: false }; // Fail gracefully
+  }
+};
+
 export default {
   predictDisease,
   fetchDiseases,
@@ -143,4 +202,8 @@ export default {
   submitContactForm,
   fetchWeatherAlerts,
   geocodeCity,
-};
+  sendWeatherAlertEmail,
+  subscribeWeatherAlerts,
+  unsubscribeWeatherAlerts,
+  getWeatherSubscriptionStatus,
+};
